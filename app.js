@@ -136,7 +136,12 @@ function handler(request, response){
 					authenticate(data.user, data.pass, function() {
 						user = data.user;
 
-						const query = `SELECT * FROM plush_logs WHERE user = "${user}";`;
+						const query = `
+						SELECT plush_logs.*, registered_plushes.plush_name FROM plush_logs 
+						INNER JOIN registered_plushes
+							ON plush_logs.plush_id=registered_plushes.plush_id
+							AND plush_logs.user = registered_plushes.user
+						WHERE plush_logs.user = "${user}";`;
 
 						var sqlite3 = require('sqlite3').verbose();
 						var db = new sqlite3.Database('db/database.db');
