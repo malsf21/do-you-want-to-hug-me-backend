@@ -66,8 +66,10 @@ function handler(request, response){
 
 				case "user-reg":
 
-					// const query = "INSERT INTO user VALUES ('"
-					const taken = execute(db, );
+					[user, real, pass, salt] = [data.user, data.real, "mypass", "thesalt"]
+
+					const query = `INSERT INTO users VALUES ("${user}", "${real}", "${pass}", "${salt}")`
+					const taken = execute(db, query);
 					
 					break;
 
