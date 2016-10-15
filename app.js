@@ -68,15 +68,15 @@ function handler(request, response){
 						const query_status = execute(db, query);
 
 						if (query_status) {
-							content = "success";
+							respond(response, "success");
 						}
 
 						else {
-							content = "query failure"
+							respond(response, "query failure)"
 						}
 					}
 					else{
-						content = "auth failure";
+						respond(response, "auth failure");
 					}
 					break;
 
@@ -90,15 +90,15 @@ function handler(request, response){
 						// GET AUTOINCREMENT VALUE
 
 						if (query_status) {
-							content = "AUTOINCREMENT VALUE";
+							respond(response, "AUTOINCREMENT VALUE");
 						}
 
 						else {
-							content = "query failure"
+							respond(response, "query failure)"
 						}
 					}
 					else{
-						content = "auth failure";
+						respond(response, "auth failure");
 					}
 					break;
 
@@ -109,14 +109,14 @@ function handler(request, response){
 						const query_response = execute(db,query);
 
 						if (query_response){
-							content = query_response;
+							respond(response, query_response);
 						}
 						else{
-							content = "query failure";
+							respond(response, "query failure");
 						}
 					}
 					else{
-						content = "auth failure";
+						respond(response, "auth failure");
 					}
 					break;
 
@@ -128,15 +128,15 @@ function handler(request, response){
 						const query_status = execute(db, query);
 
 						if (query_status) {
-							content = "success";
+							respond(response, "success");
 						}
 
 						else {
-							content = "query failure"
+							respond(response, "query failure)"
 						}
 					}
 					else{
-						content = "auth failure";
+						respond(response, "auth failure");
 					}
 					break;
 
