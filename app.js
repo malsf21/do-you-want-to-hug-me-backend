@@ -45,23 +45,83 @@ function handler(request, response){
 
 			switch (data.function) {
 				case "log-data":
-					//Do...
-					content = "";
+					if (authenticated){
+						[user, plush, date] = [data.user, data.plush, data.date];
+
+						const query = `INSERT INTO plush_logs VALUES ("${user}", "${plush}", "${date}")`;
+						const query_status = execute(db, query);
+
+						if (query_status) {
+							content = "success";
+						}
+
+						else {
+							content = "query failure"
+						}
+					}
+					else{
+						content = "auth failure";
+					}
 					break;
 
 				case "add-plush":
-					//Do...
-					content = "";
+					if (authenticated){
+						[user, plush, nickname] = [data.user, data.plush, data.nickname];
+
+						const query = `INSERT INTO registered_plushes VALUES ("${user}", NULL, "${nickname}")`;
+						const query_status = execute(db, query);
+
+						// GET AUTOINCREMENT VALUE
+
+						if (query_status) {
+							content = "AUTOINCREMENT VALUE";
+						}
+
+						else {
+							content = "query failure"
+						}
+					}
+					else{
+						content = "auth failure";
+					}
 					break;
 
 				case "get-data":
-					//Do...
-					content = "";
+					if (authenticated){
+						user = data.user;
+						const query = `SELECT * FROM plush_logs WHERE user = "${user}"`;
+						const query_response = execute(db,query);
+
+						if (query_response){
+							content = query_response;
+						}
+						else{
+							content = "query failure";
+						}
+					}
+					else{
+						content = "auth failure";
+					}
 					break;
 
 				case "edit-plush":
-					//Do...
-					content = "";
+					if (authenticated){
+						[user, plush, nickname] = [data.user, data.plush, data.nickname];
+
+						const query = `INSERT INTO registered_plushes VALUES ("${user}", "${plush}", "${nickname}")`;
+						const query_status = execute(db, query);
+
+						if (query_status) {
+							content = "success";
+						}
+
+						else {
+							content = "query failure"
+						}
+					}
+					else{
+						content = "auth failure";
+					}
 					break;
 
 				case "user-reg":
@@ -78,7 +138,7 @@ function handler(request, response){
 					else {
 						content = "false"
 					}
-					
+
 					break;
 
 				case "user-in":
@@ -108,7 +168,7 @@ function handler(request, response){
 
 const server = https.createServer(options, handler);
 
-server.listen(port, function(err){  
+server.listen(port, function(err){
 	if (err) {
 		return console.log('something bad happened', err);
 	}
