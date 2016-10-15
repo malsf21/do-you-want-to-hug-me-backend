@@ -5,15 +5,17 @@ const port = 3000;
 const bcrypt = require('bcryptjs');
 
 const options = {
-	// cert: read("/etc/letsencrypt/live/sarick.tech/cert.pem"),
-	// key: read("/etc/letsencrypt/live/sarick.tech/privkey.pem"),
-	// chain: read("/etc/letsencrypt/live/sarick.tech/chain.pem"),
-	// fullchain: read("/etc/letsencrypt/live/sarick.tech/fullchain.pem")
+	cert: read("/etc/letsencrypt/live/sarick.tech/cert.pem"),
+	key: read("/etc/letsencrypt/live/sarick.tech/privkey.pem"),
+	chain: read("/etc/letsencrypt/live/sarick.tech/chain.pem"),
+	fullchain: read("/etc/letsencrypt/live/sarick.tech/fullchain.pem")
 
-	key: read('cert/key.pem'),
-	cert: read('cert/cert.pem'),
-	passphrase: 'pass'
+	// key: read('cert/key.pem'),
+	// cert: read('cert/cert.pem'),
+	// passphrase: 'pass'
 };
+
+trip = function() {console.log("PING")}
 
 function execute(query) {
 	try {
@@ -44,6 +46,8 @@ function authenticate(user, pass, callback) {
 }
 
 function respond(response, content) {
+	console.log(content);
+
 	response.writeHead(200, {
 		'Content-Type': 'text/html',
 		'Access-Control-Allow-Origin': 'https://sarick.tech',
@@ -62,6 +66,8 @@ function handler(request, response){
 		});
 
 		request.on('end', function() {
+			console.log(request.method + "=>" + body);
+
 			// Either it's JSON
 			try {
 				data = JSON.parse(body)
@@ -89,7 +95,7 @@ function handler(request, response){
 
 			var content;
 
-			switch (data.function) {
+			switch (data.func) {
 				case "log-data":
 					authenticate(data.user, data.pass, function() {
 						[user, plush, date] = [data.user, data.plush, data.date];
