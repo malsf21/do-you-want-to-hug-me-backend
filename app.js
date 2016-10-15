@@ -66,9 +66,9 @@ function handler(request, response){
 
 				case "user-reg":
 
-					[user, real, pass, salt] = [data.user, data.real, "mypass", "thesalt"]
+					[user, real, pass, salt] = [data.user, data.real, "mypass", "thesalt"];
 
-					const query = `INSERT INTO users VALUES ("${user}", "${real}", "${pass}", "${salt}");`
+					const query = `INSERT INTO users VALUES ("${user}", "${real}", "${pass}", "${salt}");`;
 					const not_taken = execute(db, query);
 
 					if (not_taken) {
@@ -76,13 +76,9 @@ function handler(request, response){
 					}
 
 					else {
-						content = "false"
+						content = "false";
 					}
 					
-					break;
-
-				case "user-in":
-					//Do...
 					break;
 
 				case "user-edit":
