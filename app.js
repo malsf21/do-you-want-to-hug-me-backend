@@ -50,7 +50,7 @@ function respond(response, content) {
 
 	response.writeHead(200, {
 		'Content-Type': 'application/javascript',
-		'Access-Control-Allow-Origin': 'https://sarick.tech',
+		'Access-Control-Allow-Origin': '*',
 		'Access-Control-Allow-Credentials': 'true'
 	});
 	response.end(content + []);
