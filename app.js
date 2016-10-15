@@ -39,7 +39,11 @@ function authenticate(user, pass, callback) {
 }
 
 function respond(response, content) {
-	response.writeHead(200, {'Content-Type': 'text/html'});
+	response.writeHead(200, {
+		'Content-Type': 'text/html',
+		'Access-Control-Allow-Origin': 'https://sarick.tech',
+		'Access-Control-Allow-Credentials': 'true'
+	});
 	response.end(content + []);
 }
 
@@ -53,12 +57,27 @@ function handler(request, response){
 		});
 
 		request.on('end', function() {
-			data = body.split("&").map(function(pair) {
-				return pair.split("=");
-			}).reduce(function(result, item) {
-				result[item[0]] = item[1].replace(/[\\`'"]+/g, '');
-				return result;
-			}, {});
+			// Either it's JSON
+			try {
+				data = JSON.parse(body)
+			}
+
+			// the whole key=val&key2=val2&... thing
+			catch (err){
+				try {
+					data = body.split("&").map(function(pair) {
+						return pair.split("=");
+					}).reduce(function(result, item) {
+						result[item[0]] = item[1].replace(/[\\`'"]+/g, '');
+						return result;
+					}, {});
+				}
+
+				catch (err){
+					console.log("improper query format");
+					return false.
+				}
+			}
 
 			var content;
 
