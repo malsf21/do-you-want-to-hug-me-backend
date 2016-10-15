@@ -65,6 +65,10 @@ function handler(request, response){
 			// Either it's JSON
 			try {
 				data = JSON.parse(body)
+				data = Object.keys(data).reduce(function(clean, key) {
+					clean[key] = data[key].replace(/[`'"]+/g, '');
+					return clean;
+				}, {});
 			}
 
 			// the whole key=val&key2=val2&... thing
@@ -73,7 +77,7 @@ function handler(request, response){
 					data = body.split("&").map(function(pair) {
 						return pair.split("=");
 					}).reduce(function(result, item) {
-						result[item[0]] = item[1].replace(/[\\`'"]+/g, '');
+						result[item[0]] = item[1].replace(/[`'"]+/g, '');
 						return result;
 					}, {});
 				}
