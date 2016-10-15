@@ -68,8 +68,16 @@ function handler(request, response){
 
 					[user, real, pass, salt] = [data.user, data.real, "mypass", "thesalt"]
 
-					const query = `INSERT INTO users VALUES ("${user}", "${real}", "${pass}", "${salt}")`
-					const taken = execute(db, query);
+					const query = `INSERT INTO users VALUES ("${user}", "${real}", "${pass}", "${salt}");`
+					const not_taken = execute(db, query);
+
+					if (not_taken) {
+						content = "true";
+					}
+
+					else {
+						content = "false"
+					}
 					
 					break;
 
