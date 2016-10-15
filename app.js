@@ -102,15 +102,17 @@ function handler(request, response){
 				case "get-data":
 					authenticate(data.user, data.pass, function() {
 						user = data.user;
-						const query = `SELECT * FROM plush_logs WHERE user = "${user}";`;
-						const query_response = execute(query);
 
-						if (query_response){
-							respond(response, query_response);
-						}
-						else{
-							respond(response, "query failure");
-						}
+						const query = `SELECT * FROM plush_logs WHERE user = "${user}";`;
+
+						var sqlite3 = require('sqlite3').verbose();
+						var db = new sqlite3.Database('db/database.db');
+
+						db.all(query, function(err, rows){
+							respond(response, JSON.stringify(rows));
+						});
+
+						db.close();
 					});
 					break;
 
