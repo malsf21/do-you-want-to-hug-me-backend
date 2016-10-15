@@ -8,6 +8,18 @@ const options = {
 	passphrase: 'password' //TODO: Help me secure this plz
 };
 
+function execute(db, query) {
+	try {
+		db.run(query);
+		db.close();
+		return true;
+	}
+
+	catch (err) {
+		return false;
+	}
+}
+
 function handler(request, response){
 
 	if (request.method == "POST"){
@@ -18,13 +30,20 @@ function handler(request, response){
 		});
 
 		request.on('end', function() {
+			// Load the db
+			var sqlite3 = require('sqlite3').verbose();
+			var db = new sqlite3.Database('db/database.db');
+
 			data = body.split("&").map(function(pair) {
 				return pair.split("=");
-			});
+			}).reduce(function(result, item) {
+				result[item[0]] = item[1];
+				return result;
+			}, {});
 
 			var content;
 
-			switch (data[0][0]) {
+			switch (data.function) {
 				case "log-data":
 					//Do...
 					content = "";
@@ -45,6 +64,12 @@ function handler(request, response){
 					content = "";
 					break;
 
+				case "user-reg":
+
+					// const query = "INSERT INTO user VALUES ('"
+					const taken = execute(db, );
+					
+					break;
 
 				case "user-in":
 					//Do...
