@@ -49,9 +49,9 @@ function respond(response, content) {
 	console.log("<= " + content);
 
 	response.writeHead(200, {
-		'Content-Type': 'application/javascript'
-		// 'Access-Control-Allow-Origin': 'https://sarick.tech',
-		// 'Access-Control-Allow-Credentials': 'true'
+		'Content-Type': 'application/javascript',
+		'Access-Control-Allow-Origin': 'https://sarick.tech',
+		'Access-Control-Allow-Credentials': 'true'
 	});
 	response.end(content + []);
 }
