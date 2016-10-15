@@ -56,7 +56,7 @@ function handler(request, response){
 			data = body.split("&").map(function(pair) {
 				return pair.split("=");
 			}).reduce(function(result, item) {
-				result[item[0]] = item[1];
+				result[item[0]] = item[1].replace(/[\\`'"]+/g, '');
 				return result;
 			}, {});
 
