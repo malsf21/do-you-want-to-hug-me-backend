@@ -217,10 +217,6 @@ function handler(request, response){
 						respond(response, state);
 					});
 					break;
-
-				default:
-					respond(response, "fcuntion not recognized");
-					break;
 			}
 		});
 	}
