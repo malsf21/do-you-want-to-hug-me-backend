@@ -72,7 +72,7 @@ function handler(request, response){
 						}
 
 						else {
-							respond(response, "query failure)"
+							respond(response, "query failure");
 						}
 					}
 					else{
@@ -94,7 +94,7 @@ function handler(request, response){
 						}
 
 						else {
-							respond(response, "query failure)"
+							respond(response, "query failure");
 						}
 					}
 					else{
@@ -132,7 +132,7 @@ function handler(request, response){
 						}
 
 						else {
-							respond(response, "query failure)"
+							respond(response, "query failure");
 						}
 					}
 					else{
