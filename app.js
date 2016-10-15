@@ -46,7 +46,7 @@ function authenticate(user, pass, callback) {
 }
 
 function respond(response, content) {
-	console.log(content);
+	console.log("<= " + content);
 
 	response.writeHead(200, {
 		'Content-Type': 'text/html',
@@ -66,7 +66,7 @@ function handler(request, response){
 		});
 
 		request.on('end', function() {
-			console.log(request.method + "=>" + body);
+			console.log(request.method + " => " + body);
 
 			// Either it's JSON
 			try {
