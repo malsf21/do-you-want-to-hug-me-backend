@@ -5,9 +5,10 @@ const port = 3000;
 const bcrypt = require('bcryptjs');
 
 const options = {
-	key: read('cert/key.pem'),
-	cert: read('cert/cert.pem'),
-	passphrase: 'password' //TODO: Help me secure this plz
+	cert: read("/etc/letsencrypt/live/sarick.tech/cert.pem"),
+	key: read("/etc/letsencrypt/live/sarick.tech/privkey.pem"),
+	chain: read("/etc/letsencrypt/live/sarick.tech/chain.pem"),
+	fullchain: read("/etc/letsencrypt/live/sarick.tech/fullchain.pem")
 };
 
 function execute(query) {
