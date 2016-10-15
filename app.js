@@ -82,7 +82,21 @@ function handler(request, response){
 					break;
 
 				case "user-edit":
-					//Do...
+					if (authenticated){
+						[user, real, pass, salt] = [data.user, data.real, "mypass", "thesalt"];
+
+						const query = `UPDATE INTO users SET realname="${real}", password="${pass}", salt="${salt}" WHERE username="${user}";`;
+						const sucess = execute(db, query);
+
+						if (sucess) {
+							content = "true";
+						}
+
+						else {
+							content = "false";
+						}
+					}
+
 					break;
 
 				default:
