@@ -2,6 +2,8 @@ const https = require('https');
 const read = require('fs').readFileSync;
 const port = 3000;
 
+const bcrypt = require('bcryptjs');
+
 const options = {
 	key: read('cert/key.pem'),
 	cert: read('cert/cert.pem'),
@@ -18,6 +20,20 @@ function execute(db, query) {
 	catch (err) {
 		return false;
 	}
+}
+
+function authenticate(db, user, pass, callback) {
+	db.all(`SELECT * FROM users WHERE username="${user}";`, function(err, rows){
+		const row = rows[0]
+		callback(bcrypt.compareSync(pass + row.salt, row.password));
+	});
+
+	db.close();
+}
+
+function respond(response, content) {
+	response.writeHead(200, {'Content-Type': 'text/html'});
+	response.end(content + []);
 }
 
 function handler(request, response){
@@ -126,36 +142,55 @@ function handler(request, response){
 
 				case "user-reg":
 
-					[user, real, pass, salt] = [data.user, data.real, "mypass", "thesalt"]
+					const pass = data.pass;
+					const salt = bcrypt.genSaltSync(10);
 
-					const query = `INSERT INTO users VALUES ("${user}", "${real}", "${pass}", "${salt}");`
+					[user, real, hash] = [data.user, data.real, bcrypt.hashSync(pass+salt, 10)];
+
+					const query = `INSERT INTO users VALUES ("${user}", "${real}", "${hash}", "${salt}");`;
 					const not_taken = execute(db, query);
 
 					if (not_taken) {
-						content = "true";
+						respond(response, "true");
 					}
 
 					else {
-						content = "false"
+						respond(response, "false");
 					}
 
 					break;
 
-				case "user-in":
-					//Do...
+				case "user-edit":
+					authenticate(data.user, data.pass, function(){
+						const pass = data.pass;
+						const salt = bcrypt.genSaltSync(10);
+
+						[user, real, hash] = [data.user, data.real, bcrypt.hashSync(pass+salt, 10)];
+
+						const query = `UPDATE INTO users SET realname="${real}", password="${pass}", salt="${salt}" WHERE username="${user}";`;
+						const sucess = execute(db, query);
+
+						if (sucess) {
+							respond(response, "true");
+						}
+
+						else {
+							respond(response, "false");
+						}
+					});
+
 					break;
 
-				case "user-edit":
-					//Do...
+				case "user-auth":
+					authenticate(db, data.user, data.pass, function(state) {
+						respond(response, state);
+					});
 					break;
 
 				default:
 					//Do...
 					break;
 			}
-
-			response.writeHead(200, {'Content-Type': 'text/html'});
-			response.end(content);
 		});
 	}
 
