@@ -5,10 +5,14 @@ const port = 3000;
 const bcrypt = require('bcryptjs');
 
 const options = {
-	cert: read("/etc/letsencrypt/live/sarick.tech/cert.pem"),
-	key: read("/etc/letsencrypt/live/sarick.tech/privkey.pem"),
-	chain: read("/etc/letsencrypt/live/sarick.tech/chain.pem"),
-	fullchain: read("/etc/letsencrypt/live/sarick.tech/fullchain.pem")
+	// cert: read("/etc/letsencrypt/live/sarick.tech/cert.pem"),
+	// key: read("/etc/letsencrypt/live/sarick.tech/privkey.pem"),
+	// chain: read("/etc/letsencrypt/live/sarick.tech/chain.pem"),
+	// fullchain: read("/etc/letsencrypt/live/sarick.tech/fullchain.pem")
+
+	key: read('cert/key.pem'),
+	cert: read('cert/cert.pem'),
+	passphrase: 'pass'
 };
 
 function execute(query) {
