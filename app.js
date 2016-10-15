@@ -120,7 +120,7 @@ function handler(request, response){
 					authenticate(data.user, data.pass, function() {
 						[user, plush, nickname] = [data.user, data.plush, data.nickname];
 
-						const query = `INSERT INTO registered_plushes VALUES ("${user}", "${plush}", "${nickname}");`;
+						const query = `INSERT INTO registered_plushes VALUES ("${user}", ${plush}, "${nickname}");`;
 						const query_status = execute(query);
 
 						if (query_status) {
@@ -160,7 +160,7 @@ function handler(request, response){
 
 						[user, real, hash] = [data.user, data.real, bcrypt.hashSync(pass+salt, 10)];
 
-						const query = `UPDATE INTO users SET realname="${real}", password="${pass}", salt="${salt}" WHERE username="${user}";`;
+						const query = `UPDATE users SET realname="${real}", password="${hash}", salt="${salt}" WHERE username="${user}";`;
 						const sucess = execute(query);
 
 						if (sucess) {
