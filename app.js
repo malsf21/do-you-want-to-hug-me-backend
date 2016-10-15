@@ -61,7 +61,7 @@ function handler(request, response){
 
 			switch (data.function) {
 				case "log-data":
-					if (authenticated){
+					authenticate(data.user, data.pass, function() {
 						[user, plush, date] = [data.user, data.plush, data.date];
 
 						const query = `INSERT INTO plush_logs VALUES ("${user}", "${plush}", "${date}")`;
@@ -75,13 +75,10 @@ function handler(request, response){
 							respond(response, "query failure");
 						}
 					}
-					else{
-						respond(response, "auth failure");
-					}
 					break;
 
 				case "add-plush":
-					if (authenticated){
+					authenticate(data.user, data.pass, function() {
 						[user, plush, nickname] = [data.user, data.plush, data.nickname];
 
 						const query = `INSERT INTO registered_plushes VALUES ("${user}", NULL, "${nickname}")`;
@@ -97,13 +94,10 @@ function handler(request, response){
 							respond(response, "query failure");
 						}
 					}
-					else{
-						respond(response, "auth failure");
-					}
 					break;
 
 				case "get-data":
-					if (authenticated){
+					authenticate(data.user, data.pass, function() {
 						user = data.user;
 						const query = `SELECT * FROM plush_logs WHERE user = "${user}"`;
 						const query_response = execute(db,query);
@@ -115,13 +109,10 @@ function handler(request, response){
 							respond(response, "query failure");
 						}
 					}
-					else{
-						respond(response, "auth failure");
-					}
 					break;
 
 				case "edit-plush":
-					if (authenticated){
+					authenticate(data.user, data.pass, function() {
 						[user, plush, nickname] = [data.user, data.plush, data.nickname];
 
 						const query = `INSERT INTO registered_plushes VALUES ("${user}", "${plush}", "${nickname}")`;
@@ -134,9 +125,6 @@ function handler(request, response){
 						else {
 							respond(response, "query failure");
 						}
-					}
-					else{
-						respond(response, "auth failure");
 					}
 					break;
 
