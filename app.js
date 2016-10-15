@@ -2,6 +2,8 @@ const https = require('https');
 const read = require('fs').readFileSync;
 const port = 3000;
 
+const bcrypt = require('bcryptjs');
+
 const options = {
 	key: read('cert/key.pem'),
 	cert: read('cert/cert.pem'),
@@ -83,6 +85,7 @@ function handler(request, response){
 
 				case "user-edit":
 					if (authenticated){
+						magicbcrypt()
 						[user, real, pass, salt] = [data.user, data.real, "mypass", "thesalt"];
 
 						const query = `UPDATE INTO users SET realname="${real}", password="${pass}", salt="${salt}" WHERE username="${user}";`;
