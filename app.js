@@ -64,7 +64,7 @@ function handler(request, response){
 					authenticate(data.user, data.pass, function() {
 						[user, plush, date] = [data.user, data.plush, data.date];
 
-						const query = `INSERT INTO plush_logs VALUES ("${user}", "${plush}", "${date}")`;
+						const query = `INSERT INTO plush_logs VALUES ("${user}", "${plush}", "${date}");`;
 						const query_status = execute(db, query);
 
 						if (query_status) {
@@ -79,7 +79,7 @@ function handler(request, response){
 
 				case "add-plush":
 					authenticate(data.user, data.pass, function() {
-						[user, plush, nickname] = [data.user, data.plush, data.nickname];
+						[user, nickname] = [data.user, data.nickname];
 
 						const query = `INSERT INTO registered_plushes VALUES ("${user}", NULL, "${nickname}")`;
 						const query_status = execute(db, query);
@@ -99,7 +99,7 @@ function handler(request, response){
 				case "get-data":
 					authenticate(data.user, data.pass, function() {
 						user = data.user;
-						const query = `SELECT * FROM plush_logs WHERE user = "${user}"`;
+						const query = `SELECT * FROM plush_logs WHERE user = "${user}";`;
 						const query_response = execute(db,query);
 
 						if (query_response){
@@ -115,7 +115,7 @@ function handler(request, response){
 					authenticate(data.user, data.pass, function() {
 						[user, plush, nickname] = [data.user, data.plush, data.nickname];
 
-						const query = `INSERT INTO registered_plushes VALUES ("${user}", "${plush}", "${nickname}")`;
+						const query = `INSERT INTO registered_plushes VALUES ("${user}", "${plush}", "${nickname}");`;
 						const query_status = execute(db, query);
 
 						if (query_status) {
@@ -150,7 +150,7 @@ function handler(request, response){
 
 				case "user-edit":
 					authenticate(data.user, data.pass, function(){
-						const pass = data.pass;
+						const pass = data.new_pass;
 						const salt = bcrypt.genSaltSync(10);
 
 						[user, real, hash] = [data.user, data.real, bcrypt.hashSync(pass+salt, 10)];
