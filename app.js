@@ -74,7 +74,7 @@ function handler(request, response){
 						else {
 							respond(response, "query failure");
 						}
-					}
+					});
 					break;
 
 				case "add-plush":
@@ -93,7 +93,7 @@ function handler(request, response){
 						else {
 							respond(response, "query failure");
 						}
-					}
+					});
 					break;
 
 				case "get-data":
@@ -108,7 +108,7 @@ function handler(request, response){
 						else{
 							respond(response, "query failure");
 						}
-					}
+					});
 					break;
 
 				case "edit-plush":
@@ -125,7 +125,7 @@ function handler(request, response){
 						else {
 							respond(response, "query failure");
 						}
-					}
+					});
 					break;
 
 				case "user-reg":
