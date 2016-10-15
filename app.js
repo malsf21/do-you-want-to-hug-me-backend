@@ -10,8 +10,11 @@ const options = {
 	passphrase: 'password' //TODO: Help me secure this plz
 };
 
-function execute(db, query) {
+function execute(query) {
 	try {
+		// Load the db
+		var sqlite3 = require('sqlite3').verbose();
+		var db = new sqlite3.Database('db/database.db');
 		db.run(query);
 		db.close();
 		return true;
@@ -22,7 +25,11 @@ function execute(db, query) {
 	}
 }
 
-function authenticate(db, user, pass, callback) {
+function authenticate(user, pass, callback) {
+
+	var sqlite3 = require('sqlite3').verbose();
+	var db = new sqlite3.Database('db/database.db');
+
 	db.all(`SELECT * FROM users WHERE username="${user}";`, function(err, rows){
 		const row = rows[0]
 		callback(bcrypt.compareSync(pass + row.salt, row.password));
@@ -46,10 +53,6 @@ function handler(request, response){
 		});
 
 		request.on('end', function() {
-			// Load the db
-			var sqlite3 = require('sqlite3').verbose();
-			var db = new sqlite3.Database('db/database.db');
-
 			data = body.split("&").map(function(pair) {
 				return pair.split("=");
 			}).reduce(function(result, item) {
@@ -65,7 +68,7 @@ function handler(request, response){
 						[user, plush, date] = [data.user, data.plush, data.date];
 
 						const query = `INSERT INTO plush_logs VALUES ("${user}", "${plush}", "${date}");`;
-						const query_status = execute(db, query);
+						const query_status = execute(query);
 
 						if (query_status) {
 							respond(response, "success");
@@ -81,8 +84,8 @@ function handler(request, response){
 					authenticate(data.user, data.pass, function() {
 						[user, nickname] = [data.user, data.nickname];
 
-						const query = `INSERT INTO registered_plushes VALUES ("${user}", NULL, "${nickname}")`;
-						const query_status = execute(db, query);
+						const query = `INSERT INTO registered_plushes VALUES ("${user}", "${nickname}", NULL)`;
+						const query_status = execute(query);
 
 						// GET AUTOINCREMENT VALUE
 
@@ -100,7 +103,7 @@ function handler(request, response){
 					authenticate(data.user, data.pass, function() {
 						user = data.user;
 						const query = `SELECT * FROM plush_logs WHERE user = "${user}";`;
-						const query_response = execute(db,query);
+						const query_response = execute(query);
 
 						if (query_response){
 							respond(response, query_response);
@@ -116,7 +119,7 @@ function handler(request, response){
 						[user, plush, nickname] = [data.user, data.plush, data.nickname];
 
 						const query = `INSERT INTO registered_plushes VALUES ("${user}", "${plush}", "${nickname}");`;
-						const query_status = execute(db, query);
+						const query_status = execute(query);
 
 						if (query_status) {
 							respond(response, "success");
@@ -136,7 +139,7 @@ function handler(request, response){
 					[user, real, hash] = [data.user, data.real, bcrypt.hashSync(pass+salt, 10)];
 
 					const query = `INSERT INTO users VALUES ("${user}", "${real}", "${hash}", "${salt}");`;
-					const not_taken = execute(db, query);
+					const not_taken = execute(query);
 
 					if (not_taken) {
 						respond(response, "true");
@@ -156,7 +159,7 @@ function handler(request, response){
 						[user, real, hash] = [data.user, data.real, bcrypt.hashSync(pass+salt, 10)];
 
 						const query = `UPDATE INTO users SET realname="${real}", password="${pass}", salt="${salt}" WHERE username="${user}";`;
-						const sucess = execute(db, query);
+						const sucess = execute(query);
 
 						if (sucess) {
 							respond(response, "true");
@@ -170,7 +173,7 @@ function handler(request, response){
 					break;
 
 				case "user-auth":
-					authenticate(db, data.user, data.pass, function(state) {
+					authenticate(data.user, data.pass, function(state) {
 						respond(response, state);
 					});
 					break;
