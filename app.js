@@ -219,7 +219,7 @@ function handler(request, response){
 					break;
 
 				default:
-					//Do...
+					respond(response, "fcuntion not recognized");
 					break;
 			}
 		});
