@@ -83,8 +83,7 @@ function handler(request, response){
 				}
 
 				catch (err){
-					console.log("improper query format");
-					return false.
+					respond(response, "improper query format");
 				}
 			}
 
