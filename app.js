@@ -80,22 +80,25 @@ function handler(request, response){
 			// the whole key=val&key2=val2&... thing
 			catch (err){
 				try {
+					
 					data = body.split("&").map(function(pair) {
 						return pair.split("=");
 					}).reduce(function(result, item) {
-						result[item[0]] = item[1].replace(/[`'"]+/g, '');
+						result[item[0]] = item[1]//.replace(/[`'"]+/g, '');
 						return result;
 					}, {});
 				}
 
 				catch (err){
 					respond(response, "improper query format");
+					return 0
 				}
 			}
 
 			var content;
+			// console.log(data);
 
-			switch (data.func) {
+			switch (data.function) {
 				case "log-data":
 					authenticate(data.user, data.pass, function() {
 						[user, plush, date] = [data.user, data.plush, data.date];
